@@ -33,20 +33,55 @@ router.get('/:id', async (req, res) => {
     // const category = categoryData.get({ plain: true });
     return res.status(200).json(categoryData)
   } catch (err) {
-    res.status(500).json('Server-side error.')
+    res.status(500).json(err)
   }
 });
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   // create a new category
+  try {
+    const newCategory = await Category.create(req.body)
+    res.status(200).json(newCategory)
+    if (!newCategory) {
+      res.status(400).json('Oops! Looks like there is no new category to post!')
+    }
+  } catch (err) {
+    res.status(500).json(err)
+  }
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', async (req, res) => {
   // update a category by its `id` value
+  try {
+    const updateCategory = await Category.update(req.body,
+      {
+        where: 
+          {id: req.params.id}
+      }
+    )
+    res.status(200).json(updateCategory)
+    if (!updateCategory) {
+      res.status(400).json('Oops! Looks like there are no updates to add!')
+    }  
+  } catch (err) {
+    res.status(500).json(err)
+  }
+
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', async (req, res) => {
   // delete a category by its `id` value
+  try {
+    const deleteCategory = await Category.findByPk(req.params.id)
+    console.log(deleteCategory)
+    deleteCategory.destroy()
+    res.status(200).json('Successfully deleted.')
+    if (!deleteCategory) {
+      res.status(400).json('Oops! Looks like there are no categories to delete.')
+    }
+  } catch (err) {
+    res.status(500).json(err)
+  }
 });
 
 module.exports = router;
