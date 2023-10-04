@@ -31,7 +31,7 @@ router.get('/:id', async (req, res) => {
       }]
     })
     // const category = categoryData.get({ plain: true });
-    return res.status(200).json(categoryData)
+    res.status(200).json(categoryData)
   } catch (err) {
     res.status(500).json(err)
   }
@@ -66,7 +66,6 @@ router.put('/:id', async (req, res) => {
   } catch (err) {
     res.status(500).json(err)
   }
-
 });
 
 router.delete('/:id', async (req, res) => {
